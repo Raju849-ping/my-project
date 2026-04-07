@@ -12,8 +12,16 @@ for SERVER in "${SERVERS[@]}"
 do
   echo "Checking $SERVER..."
 
-  CPU=$(ssh ubuntu@$SERVER "top -bn1 | grep 'Cpu' | awk '{print 100 - \$8}' | cut -d. -f1")
-  MEM=$(ssh ubuntu@$SERVER "free | grep Mem | awk '{print \$3/\$2 * 100.0}' | cut -d. -f1")
+  CPU=$(ssh -o StrictHostKeyChecking=no ubuntu@$SERVER "top -bn1 | grep 'Cpu' | awk '{print 100 - \$8}' | cut -d. -f1" 2>/dev/null)
+  MEM=$(ssh -o StrictHostKeyChecking=no ubuntu@$SERVER "free | grep Mem | awk '{print \$3/\$2 * 100.0}' | cut -d. -f1" 2>/dev/null)
+
+  # 🔹 Handle empty values (important fix)
+  if [[ -z "$CPU" || -z "$MEM" ]]; then
+    echo "❌ Unable to fetch data from $SERVER"
+    continue
+  fi
+
+  echo "CPU: $CPU% | MEM: $MEM%"
 
   if [ "$CPU" -gt "$THRESHOLD_CPU" ] || [ "$MEM" -gt "$THRESHOLD_MEM" ]; then
     MESSAGE="⚠️ Alert: $SERVER CPU=$CPU% MEM=$MEM%"
@@ -22,6 +30,6 @@ do
     -d chat_id=$CHAT_ID \
     -d text="$MESSAGE"
   else
-    echo "$SERVER is healthy"
+    echo "✅ $SERVER is healthy"
   fi
 done
