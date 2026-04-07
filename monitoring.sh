@@ -6,7 +6,7 @@ SERVERS=(
 "udl-prd-ms1@192.168.100.28"
 )
 
-SSH_KEY="/home/udl-prd-ms2/.ssh/id_ed25519"
+SSH_KEY="/var/lib/jenkins/.ssh/id_ed25519"
 
 for SERVER in "${SERVERS[@]}"
 do
