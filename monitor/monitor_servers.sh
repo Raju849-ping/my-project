@@ -3,7 +3,11 @@
 BOT_TOKEN="8290404599:AAFOcGBJhoFKf6lsV6yCDjxDFVOPgo7JV1U"
 CHAT_ID="1439747381"
 
-SERVERS=("192.168.100.32" "192.168.100.26" "192.168.100.28")
+SERVERS=(
+"udl-prd-ms2@192.168.100.32"
+"udl-prd-ms2@192.168.100.26"
+"udl-prd-ms1@192.168.100.28"
+)
 
 THRESHOLD_CPU=80
 THRESHOLD_MEM=80
@@ -12,9 +16,8 @@ for SERVER in "${SERVERS[@]}"
 do
   echo "Checking $SERVER..."
 
-  CPU=$(ssh -o StrictHostKeyChecking=no ubuntu@$SERVER "top -bn1 | grep 'Cpu' | awk '{print 100 - \$8}' | cut -d. -f1" 2>/dev/null)
-  MEM=$(ssh -o StrictHostKeyChecking=no ubuntu@$SERVER "free | grep Mem | awk '{print \$3/\$2 * 100.0}' | cut -d. -f1" 2>/dev/null)
-
+  CPU=$(ssh -i /home/udl-prd-ms2/.ssh/id_ed25519 -o StrictHostKeyChecking=no $SERVER "top -bn1 | grep 'Cpu' | awk '{print 100 - \$8}' | cut -d. -f1" 2>/dev/null)
+  MEM=$(ssh -i /home/udl-prd-ms2/.ssh/id_ed25519 -o StrictHostKeyChecking=no $SERVER "free | grep Mem | awk '{print \$3/\$2 * 100.0}' | cut -d. -f1" 2>/dev/null)
   # 🔹 Handle empty values (important fix)
   if [[ -z "$CPU" || -z "$MEM" ]]; then
     echo "❌ Unable to fetch data from $SERVER"
