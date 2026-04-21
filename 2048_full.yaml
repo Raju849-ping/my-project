@@ -7,7 +7,7 @@ metadata:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  namespace: 
+  namespace: game-2048
   name: deployment-2048
 spec:
   selector:
@@ -36,6 +36,29 @@ spec:
     - port: 80
       targetPort: 80
       protocol: TCP
-  type: LoadBalancer
+  type: nodeport
   selector:
     app.kubernetes.io/name: app-2048
+
+---
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: game-2048-ingress
+  namespace: game-2048
+  annotations:
+    kubernetes.io/ingress.class: alb
+    alb.ingress.kubernetes.io/scheme: internet-facing
+    alb.ingress.kubernetes.io/target-type: ip
+    alb.ingress.kubernetes.io/listen-ports: '[{"HTTP":80}]'
+spec:
+  rules:
+  - http:
+      paths:
+      - path: /*
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: service-2048
+            port:
+              number: 80
