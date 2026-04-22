@@ -1,0 +1,13 @@
+<h1>🛒 Product Catalog</h1>
+<button onclick="loadProducts()">Load Products</button>
+<pre id="data"></pre>
+
+<script>
+function loadProducts() {
+  fetch('/api/products')
+  .then(res => res.json())
+  .then(data => {
+    document.getElementById("data").innerText = JSON.stringify(data, null, 2);
+  });
+}
+</script>
