@@ -1,0 +1,19 @@
+<h1>Owner Panel</h1>
+
+<input id="name" placeholder="Product Name">
+<input id="qty" placeholder="Quantity">
+
+<button onclick="update()">Update</button>
+
+<script>
+function update() {
+  fetch('/api/update', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify({
+      name: document.getElementById("name").value,
+      quantity: document.getElementById("qty").value
+    })
+  }).then(() => alert("Updated"));
+}
+</script>
