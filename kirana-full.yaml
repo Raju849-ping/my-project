@@ -82,7 +82,7 @@ spec:
     spec:
       containers:
       - name: catalog
-        image: <your-dockerhub>/kirana-catalog:latest
+        image: rraju511/kiranam:latest
         ports:
         - containerPort: 3000
         env:
@@ -123,7 +123,7 @@ spec:
     spec:
       containers:
       - name: nginx
-        image: <your-dockerhub>/kirana-nginx:latest
+        image: rraju511/kirana-nginx:latest
         ports:
         - containerPort: 80
 
