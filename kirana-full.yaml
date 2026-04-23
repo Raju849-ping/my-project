@@ -82,7 +82,7 @@ spec:
     spec:
       containers:
       - name: catalog
-        image: rraju511/kiranam:latest
+        image: rraju511/kirana:latest
         ports:
         - containerPort: 3000
   env:
