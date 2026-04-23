@@ -85,9 +85,23 @@ spec:
         image: rraju511/kiranam:latest
         ports:
         - containerPort: 3000
-        env:
-        - name: MONGO_URL
-          value: "mongodb://mongodb:27017/kirana"
+  env:
+  - name: MONGO_URL
+    value: "mongodb://mongodb.kirana.svc.cluster.local:27017/kirana"
+
+  readinessProbe:
+    httpGet:
+      path: /health
+      port: 3000
+    initialDelaySeconds: 10
+    periodSeconds: 5
+
+  livenessProbe:
+    httpGet:
+      path: /health
+      port: 3000
+    initialDelaySeconds: 20
+    periodSeconds: 10
 
 ---
 apiVersion: v1
